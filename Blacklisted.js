@@ -155,7 +155,7 @@ USERBOT.on('guildMemberAdd', member => {
 						EXECUTIONER.channels.get(CONFIG.Command_Channels[index]).send(memberSpoofing).catch(console.error).then( m => {
 							// GET THE USER AND SEND THEM AN INITIAL WARNING
 							EXECUTIONER.guilds.get(guildID).fetchMember(member.id).then( TARGET => {
-								let configWarn=CONFIG.Joined_Spoof_Server_While_In_My_Server_Warning.replace(/%SPOOFSERVER%/g, foundServers).replace(/%SERVERNAME%/g, CONFIG.Home_Server_Names[index]);
+								let configWarn=CONFIG.Joined_Spoof_Server_While_In_My_Server_Warning.replace(/%SPOOFSERVER%/g, foundServers).replace(/%SERVERNAME%/g, CONFIG.Home_Server_Names[index]).replace(/%TIMETILPUNISH%/g, CONFIG.Minutes_Til_Punish[index]);
 								let warnMessage=new Discord.RichEmbed().setColor('ff0000')
 									.setThumbnail('https://i.imgur.com/gXw71sr.jpg?1')
 									.setDescription(configWarn)
