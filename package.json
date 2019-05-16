@@ -1,0 +1,23 @@
+{
+  "name": "blacklisted-server-checking",
+  "version": "1.0.0",
+  "description": "Script for checking if user is on blacklisted Discord servers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nileplumb/Blacklisted-Server-Checking.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nileplumb/Blacklisted-Server-Checking/issues"
+  },
+  "homepage": "https://github.com/nileplumb/Blacklisted-Server-Checking#readme",
+  "dependencies": {
+    "discord.js": "^11.5.0",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.25"
+  }
+}

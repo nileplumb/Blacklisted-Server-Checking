@@ -1,31 +1,32 @@
 # BlacklistedServerChecking
 
+> Heavily inspired by [RussellG89's script](https://github.com/RussellG89/Blacklisted-Server-Checking)
+
 1: Create a user account and join all the servers you want checked for your members.
 
 2: Fill out `blacklist_config.json.example` in files and rename to `blacklist_config.json`. 
-- The user bot token must be the bot you just created. Google "How to get discord user token" for how to get a user token. The bot token must be a bot in your server with rights to kick or ban members based on your config settings. 
-- `POUND_LEVEL` in the config can either be `KICK` or `BAN`.
-- Add `%SPOOFSERVER%` anywhere in the config message to name the server the blacklisted server they have joined. **DO NOT** user this for the `Joined_My_Server_While_In_Spoof_Servers_Warning` config as they may be in multiple blasklisted servers when they join your server. 
+- The user token must be the account you just created. Google "How to get discord user token" for how to get a user token.
+- The bot token must be a bot in your server with rights to kick or ban members based on your config settings. 
+- `POUND_LEVEL` in the config can be `KICK`, `BAN`, `ROLE` or `NICK`.
+- Add `%SPOOFSERVERS%` anywhere in the config message to get the names of blacklisted servers they have joined.
 
-3: Install node.js if not alread on your machine. 
+3: Install [Node.js](https://nodejs.org/) if it's not installed already on your machine. 
 
-4: Run `git clone https://github.com/RussellG89/Blacklisted-Server-Checking.git` in your terminal.
+4: Run `git clone https://github.com/Bjornskjald/Blacklisted-Server-Checking.git` in your terminal.
 
 5: cd to the cloned directory
 
 6: Install required npm modules
-  - `npm install moment`
-  - `npm install moment-timezone`
-  - `npm install discord.js`
-  - `npm install pm2`
+  - `npm install`
 
-7: Start the script using `pm2 start Blacklisted.js`
+7: Start the script using `pm2 start index.js`
 
 All Commands must be preceeding by the command prefix in your config file and in the specified channel.
 Commands: 
-- `help` -> lists commands you can use
-- `check all` -> Checks all users in your server for membership to blacklisted servers.
-- `check all sudo` -> Checks all users and ignores your whitelist.
+- `check all` -> Checks all users in your server
+- `check user_id` -> Checks the user specified in the command (replace user_id with the ID)
+- `warn user_id` -> Warns the user about being in blacklisted servers
+- `restart` -> Restarts the bot
 
 This bot will automatically monitor users onjoin to your server as well as all of the blacklisted servers. It does not do a check on start-up, so you will need to run a `check all` once started. As long as it is running, it is watching. 
 
