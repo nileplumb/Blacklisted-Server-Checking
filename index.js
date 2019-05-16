@@ -21,14 +21,18 @@ const userbot = new Discord.Client({
 })
 const punish = require('./punish')(executioner, userbot)
 
-executioner.on('ready', () => console.info('[Blacklist] Executioner is ready to enact your will.'))
+executioner.on('ready', () => {
+  console.info('[Blacklist] Executioner is ready to enact your will.')
+  homeServers = config.Home_Server_IDs.map(guildID => executioner.guilds.get(guildID))
+  commandChannels = config.Command_Channels.map(channel => executioner.channels.get(channel))
+})
 userbot.on('ready', () => {
   console.info(`[Blacklist] Now Checking ${userbot.guilds.size - config.Home_Server_IDs.length} Blacklisted Servers.`)
   userbot.user.setPresence({ 'status': 'invisible' })
 })
 
-const homeServers = config.Home_Server_IDs.map(guildID => executioner.guilds.get(guildID))
-const commandChannels = config.Command_Channels.map(channel => executioner.channels.get(channel))
+let homeServers
+let commandChannels
 
 function isWhitelisted (member) {
   return config.Whitelist_Roles.some(role => member.roles.has(role)) || config.Whitelist.includes(member.id)
