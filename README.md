@@ -7,7 +7,7 @@
 2: Fill out `blacklist_config.json.example` in files and rename to `blacklist_config.json`. 
 - The user token must be the account you just created. Google "How to get discord user token" for how to get a user token.
 - The bot token must be a bot in your server with rights to kick or ban members based on your config settings. 
-- `POUND_LEVEL` in the config can be `KICK`, `BAN`, `ROLE` or `NICK`.
+- `POUND_LEVEL` in the config can be `KICK`, `BAN`, `ROLE`, `NICK` or `NICKROLE`.
 - Add `%SPOOFSERVERS%` anywhere in the config message to get the names of blacklisted servers they have joined.
 
 3: Install [Node.js](https://nodejs.org/) if it's not installed already on your machine. 

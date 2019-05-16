@@ -22,11 +22,15 @@ module.exports = executioner => {
     await command.send(embeds.command.nicknamedSuccess(member))
   }
 
-  return function punish (type = 'KICK', member, command, servers) {
+  return async function punish (type = 'KICK', member, command, servers) {
     const user = executioner.users.get(member.id)
     if (type === 'KICK') return kick(user, member, command, servers)
     if (type === 'BAN') return ban(user, member, command, servers)
     if (type === 'ROLE') return role(user, member, command, servers)
     if (type === 'NICK') return nick(user, member, command, servers)
+    if (type === 'NICKROLE') {
+      await nick(user, member, command, servers)
+      await role(user, member, command, servers)
+    }
   }
 }
