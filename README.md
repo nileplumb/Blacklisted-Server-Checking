@@ -1,6 +1,6 @@
 # BlacklistedServerChecking
 
-> Heavily inspired by [RussellG89's script](https://github.com/RussellG89/Blacklisted-Server-Checking)
+> Forked from [RussellG89's script](https://github.com/RussellG89/Blacklisted-Server-Checking) with suggestions from [nileplumb](https://github.com/nileplumb)
 
 1: Create a user account and join all the servers you want checked for your members.
 
