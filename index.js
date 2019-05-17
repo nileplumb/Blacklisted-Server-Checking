@@ -94,7 +94,7 @@ async function handleExistingMember (member) {
   if (!foundServers.length) return
 
   // send info message to the command channel
-  await command.send(embeds.command.joinedBlacklisted(member))
+  await command.send(embeds.command.joinedBlacklisted(member, foundServers))
 
   // send warning message to the member
   await user.send(embeds.user.joinedBlacklisted(member, foundServers))
