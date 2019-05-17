@@ -1,4 +1,4 @@
-const moment = require('moment')
+const moment = require('moment-timezone')
 const Discord = require('discord.js')
 const username = member => member.nickname || member.user.username
 const config = require('./files/blacklist_config.json')
