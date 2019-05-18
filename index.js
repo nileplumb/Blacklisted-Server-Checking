@@ -21,6 +21,10 @@ const userbot = new Discord.Client({
 })
 const punish = require('./punish')(executioner, userbot)
 
+
+let homeServers
+let commandChannels
+
 executioner.on('ready', () => {
   console.info('[Blacklist] Executioner is ready to enact your will.')
   homeServers = config.Home_Server_IDs.map(guildID => executioner.guilds.get(guildID))
@@ -30,9 +34,6 @@ userbot.on('ready', () => {
   console.info(`[Blacklist] Now Checking ${userbot.guilds.size - config.Home_Server_IDs.length} Blacklisted Servers.`)
   userbot.user.setPresence({ 'status': 'invisible' })
 })
-
-let homeServers
-let commandChannels
 
 function isWhitelisted (member) {
   return config.Whitelist_Roles.some(role => member.roles.has(role)) || config.Whitelist.includes(member.id)
@@ -58,7 +59,7 @@ async function checkAfterDelay (member, homeServer, command) {
   const foundServers = getBlacklistedServersForUser(member.id)
   if (!foundServers.length) return user.send(embeds.user.leftBlacklisted(member))
 
-  return punish(config.Pound_Level, member, command, foundServers)
+  return punish(config.Pound_Level, homeServer.members.get(member.id), command, foundServers)
 }
 
 async function handleNewMember (member) {
@@ -97,7 +98,7 @@ async function handleExistingMember (member) {
   await command.send(embeds.command.joinedBlacklisted(member, foundServers))
 
   // send warning message to the member
-  await user.send(embeds.user.joinedBlacklisted(member, foundServers))
+  await user.send(embeds.user.joinedBlacklisted(homeServer.name, foundServers))
 
   // send "member warned" info message
   await command.send(embeds.command.warnedSuccess(member))
@@ -128,18 +129,22 @@ userbot.on('guildMemberRemove', async member => {
   const homeServer = homeServers.find(server => server.members.has(member.id))
   const command = commandChannels.find(channel => channel.guild.id === homeServer.id)
 
+  if (config.Home_Server_IDs.includes(member.guild.id)) return command.send(embeds.command.leftHome(member))
+
   const foundServers = getBlacklistedServersForUser(member.id)
-  if (!foundServers) return command.send(embeds.command.leftAllBlacklisted(member))
+  if (!foundServers.length) return command.send(embeds.command.leftAllBlacklisted(member))
 
   await command.send(embeds.command.leftBlacklisted(member, foundServers))
 })
 
-userbot.on('message', async message => {
+executioner.on('message', async message => {
   if (!config.Command_Channels.includes(message.channel.id)) return
   if (!message.content.startsWith(config.Prefix)) return
 
+  const channel = commandChannels.find(channel => channel.id === message.channel.id)
+
   if (!message.member.roles.has(config.AdminRoleID) && !message.member.roles.has(config.ModRoleID) && message.member.id !== config.Owner_ID) {
-    await message.channel.send(embeds.command.noPermissions())
+    await channel.send(embeds.command.noPermissions())
     return
   }
   const [ command, ...args ] = message.cleanContent.slice(config.Prefix.length).split(' ')
@@ -154,24 +159,24 @@ userbot.on('message', async message => {
         if (isWhitelisted(member)) continue
 
         const foundServers = getBlacklistedServersForUser(member.id)
-        if (!foundServers) continue
+        if (!foundServers.length) continue
 
         badMembers++
 
-        await message.channel.send(embeds.command.foundMemberInBlacklisted(member, foundServers))
+        await channel.send(embeds.command.foundMemberInBlacklisted(member, foundServers))
       }
 
-      if (badMembers > 0) await message.channel.send(embeds.command.foundXMembersInBlacklisted(badMembers))
+      if (badMembers > 0) await channel.send(embeds.command.foundXMembersInBlacklisted(badMembers))
     } else if (message.guild.members.has(target)) {
       const member = message.guild.members.get(target)
-      if (isWhitelisted(member)) return message.channel.send(embeds.command.userWhitelisted())
+      if (isWhitelisted(member)) return channel.send(embeds.command.userWhitelisted())
 
       const foundServers = getBlacklistedServersForUser(target)
-      if (!foundServers.length) return message.channel.send(embeds.command.userClean())
+      if (!foundServers.length) return channel.send(embeds.command.userClean())
 
-      await message.channel.send(embeds.command.foundMemberInBlacklisted(member, foundServers))
+      await channel.send(embeds.command.foundMemberInBlacklisted(member, foundServers))
     } else {
-      await message.channel.send(embeds.command.invalidCheck())
+      await channel.send(embeds.command.invalidCheck())
     }
   }
   if (command === 'restart') {
@@ -181,15 +186,34 @@ userbot.on('message', async message => {
     const [ target ] = args
     if (message.guild.members.has(target)) {
       const member = message.guild.members.get(target)
-      if (isWhitelisted(member)) return message.channel.send(embeds.command.userWhitelisted())
+      if (isWhitelisted(member)) return channel.send(embeds.command.userWhitelisted())
 
       const foundServers = getBlacklistedServersForUser(target)
-      if (!foundServers.length) return message.channel.send(embeds.command.userClean())
+      if (!foundServers.length) return channel.send(embeds.command.userClean())
 
-      await executioner.users.get(member.id).send(embeds.user.manuallyChecked(member, foundServers))
-      await message.channel.send(embeds.command.warnedSuccess())
+      await executioner.users.get(member.id).send(embeds.user.manuallyWarned(member, foundServers))
+      await channel.send(embeds.command.warnedSuccess(member))
     } else {
-      await message.channel.send(embeds.command.invalidCheck())
+      await channel.send(embeds.command.invalidCheck())
+    }
+  }
+  if (command === 'punish') {
+    const [ target ] = args
+    if (message.guild.members.has(target)) {
+      const member = message.guild.members.get(target)
+      if (isWhitelisted(member)) return channel.send(embeds.command.userWhitelisted())
+
+      const foundServers = getBlacklistedServersForUser(target)
+      if (!foundServers.length) return channel.send(embeds.command.userClean())
+
+      await executioner.users.get(member.id).send(embeds.user.manuallyPunished(member, foundServers))
+      await channel.send(embeds.command.warnedSuccess(member))
+
+      await sleep(config.Minutes_Til_Punish * 1000 * 60)
+
+      return checkAfterDelay(member, message.guild, channel)
+    } else {
+      await channel.send(embeds.command.invalidCheck())
     }
   }
 })

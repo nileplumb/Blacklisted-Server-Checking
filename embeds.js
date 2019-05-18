@@ -32,14 +32,14 @@ module.exports = {
 
     leftBlacklisted: (member, foundServers) => Success(`Member has left ${member.guild.name}`)
       .setAuthor(`${username(member)} (${member.id})`, member.user.displayAvatarURL)
-      .addField('Remaining blacklisted server(s):', foundServers.join('\n')),
+      .addField('Remaining blacklisted server(s):', foundServers.join('\n') || 'none!'),
 
     leftAllBlacklisted: member => Success('No longer a member of any Blacklisted Servers.')
       .setAuthor(`${username(member)} (${member.id})`, member.user.displayAvatarURL),
 
     foundMemberInBlacklisted: (member, foundServers) => Warning('Found a member of blacklisted servers')
       .setAuthor(`${username(member)} (${member.id})`, member.user.displayAvatarURL)
-      .addField('Blacklisted server(s):', foundServers.join('\n')),
+      .addField('Blacklisted server(s):', foundServers.join('\n') || 'none!'),
 
     foundXMembersInBlacklisted: count => Warning(`${count} members were found in blacklisted servers`),
 
@@ -63,13 +63,19 @@ module.exports = {
       .setThumbnail('https://i.imgur.com/fE3yYLz.jpg?1')
       .addField('Blacklisted server(s):', foundServers.join('\n')),
 
-    joinedBlacklisted: (member, foundServers) => Warning(config.Joined_Spoof_Server_While_In_My_Server_Warning
+    joinedBlacklisted: (serverName, foundServers) => Warning(config.Joined_Spoof_Server_While_In_My_Server_Warning
+      .replace(/%SPOOFSERVERS%/g, foundServers.join(', '))
+      .replace(/%SERVERNAME%/g, serverName)
+      .replace(/%TIMETILPUNISH%/g, config.Minutes_Til_Punish))
+      .setThumbnail('https://i.imgur.com/gXw71sr.jpg?1'),
+
+    manuallyWarned: (member, foundServers) => Warning(config.Manual_Warn_Warning
       .replace(/%SPOOFSERVERS%/g, foundServers.join(', '))
       .replace(/%SERVERNAME%/g, member.guild.name)
       .replace(/%TIMETILPUNISH%/g, config.Minutes_Til_Punish))
       .setThumbnail('https://i.imgur.com/gXw71sr.jpg?1'),
 
-    manuallyChecked: (member, foundServers) => Warning(config.Manual_Check_Warning
+    manuallyPunished: (member, foundServers) => Warning(config.Manual_Punish_Warning
       .replace(/%SPOOFSERVERS%/g, foundServers.join(', '))
       .replace(/%SERVERNAME%/g, member.guild.name)
       .replace(/%TIMETILPUNISH%/g, config.Minutes_Til_Punish))

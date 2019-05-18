@@ -1,4 +1,5 @@
 const embeds = require('./embeds')
+const config = require('./files/blacklist_config.json')
 
 module.exports = executioner => {
   const kick = async (user, member, command, servers) => {
@@ -13,12 +14,12 @@ module.exports = executioner => {
   }
   const role = async (user, member, command, servers) => {
     await user.send(embeds.user.tagged(member, servers))
-    await member.addRole(config.Punish_Role, 'Member of a spoofing server.')
+    await member.addRole(config.Punish_Role_ID, 'Member of a spoofing server.')
     await command.send(embeds.command.taggedSuccess(member))
   }
   const nick = async (user, member, command, servers) => {
     await user.send(embeds.user.nicknamed(member, servers))
-    await member.setNickname(`${config.Punish_Nickname} ${member.nickname || member.user.username}`, 'Member of a spoofing server.')
+    await member.setNickname(`${config.Punish_Nickname_Prefix} ${member.nickname || member.user.username}`, 'Member of a spoofing server.')
     await command.send(embeds.command.nicknamedSuccess(member))
   }
 
