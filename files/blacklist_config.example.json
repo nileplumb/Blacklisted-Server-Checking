@@ -21,5 +21,7 @@
   "Banned_Message": "Sorry to see you go... You have been banned from **%SERVERNAME%** for not leaving following servers: **%SPOOFSERVERS%**.",
   "Roletagged_Message": "Hey, look what you've got! A cheater role! Now everybody knows you cheat.",
   "Nicknamed_Message": "Hey, look what you've got! A cheater nickname! Now everybody knows you cheat.",
+  "Manual_Warn_Warning": "Uh oh! Looks like you are a member of a spoofing/blacklisted server! Please leave following servers: **%SPOOFSERVERS%**, contact an Admin if you have any questions. Have a good day!",
+  "Manual_Punish_Warning": "Uh oh! Looks like you are a member of a spoofing/blacklisted server! Please leave following servers: **%SPOOFSERVERS%** in the next **%TIMETILPUNISH% minutes** if you wish to stay a member of **%SERVERNAME%**. Please contact an Admin if you have any questions. Have a good day!",
   "Left_Spoof_Message": "'Awesome, looks like you left all spoofing/blacklisted servers! Please contact an Admin of **%SERVERNAME%** if you have any questions. Have a good day!'"
 }
