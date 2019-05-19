@@ -1,6 +1,6 @@
 # BlacklistedServerChecking
 
-> Forked from [RussellG89's script](https://github.com/RussellG89/Blacklisted-Server-Checking) with suggestions from [nileplumb](https://github.com/nileplumb)
+> Forked from [RussellG89's script](https://github.com/RussellG89/Blacklisted-Server-Checking) with suggestions from [nileplumb](https://github.com/nileplumb) Huge thanks to [Bjornskjald](https://github.com/Bjornskjald) for helping rewrite the script and add functions.
 
 1: Create a user account and join all the servers you want checked for your members.
 
@@ -25,10 +25,13 @@ All Commands must be preceeding by the command prefix in your config file and in
 Commands: 
 - `check all` -> Checks all users in your server
 - `check user_id` -> Checks the user specified in the command (replace user_id with the ID)
-- `warn user_id` -> Warns the user about being in blacklisted servers
+- `warn user_id` -> Warns the user about being in blacklisted servers, without punishment
+- `punish user_id` -> Warns the user about being in blacklisted servers and starts the punishment countdown process
 - `restart` -> Restarts the bot
 
-This bot will automatically monitor users onjoin to your server as well as all of the blacklisted servers. It does not do a check on start-up, so you will need to run a `check all` once started. As long as it is running, it is watching. 
+This bot will automatically monitor users onjoin to your server as well as all of the blacklisted servers. It does not do a check on start-up, so you will need to run a `check all` once started. As long as it is running, it is watching.
+
+Users discovered automatically start punishment countdown against them.
 
 Screenshots:
 
